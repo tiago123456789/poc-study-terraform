@@ -1,0 +1,3 @@
+infra/s3/.terraform
+infra/sqs/.terraform
+infra/cloudwatch/.terraform

@@ -1,0 +1,65 @@
+name: Create or Destroy s3 bucket
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: Action
+        options:
+        - Create
+        - Destroy
+      bucketName:
+        description: Bucket name to create
+        required: true
+
+jobs:
+   
+  setup: 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.1"
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+
+      - name: Add profile credentials to ~/.aws/credentials
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile tiago
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile tiago
+            aws configure set region us-east-1 --profile tiago
+
+
+      - name: Execute terraform script to create bucket
+        if: github.event.inputs.action == 'Create'
+        run: |
+          cd infra/s3
+          terraform init
+          terraform apply -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}"
+
+      - name: Execute terraform script to destroy bucket
+        if: github.event.inputs.action == 'Destroy'
+        run: |
+          cd infra/s3
+          terraform init
+          terraform destroy -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}"
+
+
+
+
+  
