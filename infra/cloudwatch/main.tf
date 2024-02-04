@@ -12,12 +12,12 @@ provider "aws" {
 }
 
 resource "aws_cloudwatch_log_group" "log" {
-  name              = "/application/${var.log_name}"
+  name              = "/application/${var.log_name}_${var.environment}"
   retention_in_days = 30 
 }
 
 resource "aws_cloudwatch_log_stream" "stream" {
-  name           = "${var.log_name}-log-stream"
+  name           = "${var.log_name}-log-stream_${var.environment}"
   log_group_name = aws_cloudwatch_log_group.log.name
 }
 

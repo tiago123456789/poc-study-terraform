@@ -6,6 +6,13 @@ on:
       logName:
         description: Log name
         required: true
+      environment:
+        type: choice
+        description: Action
+        options:
+        - dev
+        - stage
+        - prod
       action:
         type: choice
         description: Action
@@ -48,13 +55,13 @@ jobs:
         run: |
           cd infra/cloudwatch
           terraform init
-          terraform apply -auto-approve -var="log_name=${{ github.event.inputs.logName }}"
+          terraform apply -auto-approve -var="log_name=${{ github.event.inputs.logName }}" -var="environment=${{ github.event.inputs.environment }}"
 
       - name: Execute terraform script to destroy queue
         if: github.event.inputs.action == 'Destroy'
         run: |
           cd infra/cloudwatch
           terraform init
-          terraform destroy -auto-approve -var="log_name=${{ github.event.inputs.logName }}"
+          terraform destroy -auto-approve -var="log_name=${{ github.event.inputs.logName }}" -var="environment=${{ github.event.inputs.environment }}"
 
 
