@@ -63,5 +63,3 @@ jobs:
           cd infra/cloudwatch
           terraform init
           terraform destroy -auto-approve -var="log_name=${{ github.event.inputs.logName }}" -var="environment=${{ github.event.inputs.environment }}"
-
-
