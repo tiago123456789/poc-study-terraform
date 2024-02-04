@@ -3,6 +3,13 @@ name: Create or Destroy queue
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        type: choice
+        description: Action
+        options:
+        - dev
+        - stage
+        - prod
       queueName:
         description: Queue name to create
         required: true
@@ -48,13 +55,13 @@ jobs:
         run: |
           cd infra/sqs
           terraform init
-          terraform apply -auto-approve -var="queue_name=${{ github.event.inputs.queueName }}"
+          terraform apply -auto-approve -var="queue_name=${{ github.event.inputs.queueName }}" -var="environment=${{ github.event.inputs.environment }}"
 
       - name: Execute terraform script to destroy queue
         if: github.event.inputs.action == 'Destroy'
         run: |
           cd infra/sqs
           terraform init
-          terraform destroy -auto-approve -var="queue_name=${{ github.event.inputs.queueName }}"
+          terraform destroy -auto-approve -var="queue_name=${{ github.event.inputs.queueName }}" -var="environment=${{ github.event.inputs.environment }}"
 
 
