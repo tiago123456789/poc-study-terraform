@@ -1,7 +1,6 @@
 terraform {
   backend "s3" {
     bucket = "poc-terraform-backend-state"
-    profile = "tiago"
     region = "us-east-1"
     key = "s3"
   }
@@ -9,7 +8,7 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
-  profile = "tiago"
+  profile = "${var.aws_profile}"
 }
 
 resource "aws_s3_bucket" "my_bucket" {

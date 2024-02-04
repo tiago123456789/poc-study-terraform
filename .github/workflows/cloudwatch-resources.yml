@@ -40,8 +40,8 @@ jobs:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile tiago
-            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile tiago
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
 
       - name: Execute terraform script to create cloudwatch logs
         if: github.event.inputs.action == 'Create'
