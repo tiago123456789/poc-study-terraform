@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = var.bucket_name 
+  bucket = "${var.bucket_name}_${var.environment}" 
 
   website {
     index_document = "index.html"    

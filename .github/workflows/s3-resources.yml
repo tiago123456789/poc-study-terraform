@@ -3,6 +3,13 @@ name: Create or Destroy s3 bucket
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        type: choice
+        description: Action
+        options:
+        - dev
+        - stage
+        - prod
       action:
         type: choice
         description: Action
@@ -50,14 +57,14 @@ jobs:
         run: |
           cd infra/s3
           terraform init
-          terraform apply -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}"
+          terraform apply -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}" -var="environment=${{ github.event.inputs.environment }}"
 
       - name: Execute terraform script to destroy bucket
         if: github.event.inputs.action == 'Destroy'
         run: |
           cd infra/s3
           terraform init
-          terraform destroy -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}"
+          terraform destroy -auto-approve -var="bucket_name=${{ github.event.inputs.bucketName }}" -var="environment=${{ github.event.inputs.environment }}"
 
 
 
