@@ -12,5 +12,4 @@ variable "environment" {
   description = "The environment for the infrastructure"
   type        = string
   default = "dev"
-  allowed_values = ["dev", "stage", "prod"]
 }
